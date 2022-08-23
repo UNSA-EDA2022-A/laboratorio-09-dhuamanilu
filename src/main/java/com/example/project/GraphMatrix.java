@@ -78,8 +78,19 @@ public class GraphMatrix implements Graph {
     }
 
     public int countConnectedComponents() {
-
-        return -1;
+        //Parecido al metodo countConnected de adjacent list
+        int cont=0;
+        ArrayList<Integer> vertex=new ArrayList<Integer>();
+        for(int i=0;i<numVertices;i++)
+            vertex.add(i);
+        while(vertex.size()>0){
+            //En esta clase ya venia implementado dfs,pero lo hace a traves de una 
+            //funcion "contenedora",por lo tanto ahora solo le paso el vertice
+            for(Integer a : depthFirstSearch(vertex.get(vertex.size()-1)))
+                vertex.remove(a);
+            cont++;
+        }
+        return cont;
     }
 
     public static void main(String args[]) {
