@@ -51,7 +51,14 @@ public class GraphAdjacentList implements Graph {
         }
         return fromV.removeAdjacentVertex(to);
     }
-
+    public ArrayList<Vertex> depthFirstSearch(Vertex v,ArrayList<Vertex> visited){
+        visited.add(v);
+        for(Vertex a : v.adjacentVertices){
+            if(!visited.contains(a))
+                depthFirstSearch(a, visited);
+        }
+        return visited;
+    }
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -86,11 +93,33 @@ public class GraphAdjacentList implements Graph {
     }
 
     public int countConnectedComponents(){
-        return -1;
+        int cont=0;
+        ArrayList<Vertex> vertex=new ArrayList<Vertex>();
+        vertex.addAll(this.vertices);
+        while(vertex.size()>0){
+            for(Vertex a : depthFirstSearch(vertex.get(vertex.size()-1),new ArrayList<Vertex>()))
+                vertex.remove(a);
+            cont++;
+        }
+        return cont;
     }
-
+    
     public boolean removeVertex(int vertex){
-        return false;
+        Vertex auxi=null;
+        for(Vertex a : vertices){
+            if(a.data==vertex)
+                auxi=a;
+        }
+        if(auxi==null) return false;
+        //borrar el propio vertice
+        vertices.remove(auxi);
+        //borrar las aristas adyacentes a el
+        for(Vertex a : vertices){
+        	//removeAdjacentVertex ya lo hace en la clase Vertex
+            a.removeAdjacentVertex(vertex);
+        }
+        numVertices=vertices.size();
+        return true;
     }
 
     public static void main(String args[]) {
@@ -102,5 +131,8 @@ public class GraphAdjacentList implements Graph {
         graph.addEdge(3, 4);
         graph.addEdge(4, 1);        
         System.out.println(graph);
+        /*ArrayList<Vertex> prueba=new ArrayList<Vertex> ();
+        prueba.add(new Vertex(5));
+        graph.depthFirstSearch(prueba.get(0), new ArrayList<Vertex>());*/
     }
 }
